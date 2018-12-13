@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 
 namespace LikeEcharts.View
 {
-    public static class Other
+    public static class PathEllipse
     {
 
         #region 获取跑动的点

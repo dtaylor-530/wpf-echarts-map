@@ -56,10 +56,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Converter\FirstItemConverter.cs" />
     <Compile Include="Converter\XYtoPointConverter.cs" />
-    <Compile Include="NestedTypeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -73,8 +71,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RandomBrushes.cs" />
-    <Compile Include="Other.cs" />
+    <Compile Include="RandomBrush.cs" />
+    <Compile Include="PathEllipse.cs" />
     <Compile Include="StoryBoard.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

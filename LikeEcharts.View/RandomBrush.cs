@@ -34,9 +34,6 @@ namespace LikeEcharts.View
                yield return (Brush)propInfo.GetValue(null, null);
             }
         }
-
-
-
         
     }
 }
