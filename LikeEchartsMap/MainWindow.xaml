@@ -1,8 +1,9 @@
 ﻿<Window x:Class="LikeEchartsMap.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:view="clr-namespace:LikeEcharts.View;assembly=LikeEcharts.View"
+      
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="仿百度Echart人口迁移图" Width="640" Height="480" Loaded="Window_Loaded">
+        Title="仿百度Echart人口迁移图" Width="640" Height="480" >
     <Window.Resources>
         <view:FirstItemConverter x:Key="FirstItemConverter"></view:FirstItemConverter>
     </Window.Resources>

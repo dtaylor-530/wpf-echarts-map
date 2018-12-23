@@ -1,5 +1,4 @@
-﻿using LikeEcharts.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace LikeEcharts.View
+namespace PathWpf
 {
     public static class StoryBoard
     {
@@ -28,13 +27,15 @@ namespace LikeEcharts.View
             tfg.Children.Add(ttf);
             runPoint.RenderTransform = tfg;
 
-            MatrixAnimationUsingPath maup = new MatrixAnimationUsingPath();
-            maup.PathGeometry = particlePath.Data.GetFlattenedPathGeometry();
-            maup.Duration = new Duration(TimeSpan.FromSeconds(pointTime));
-            maup.RepeatBehavior = RepeatBehavior.Forever;
-            maup.AutoReverse = false;
-            maup.IsOffsetCumulative = false;
-            maup.DoesRotateWithTangent = true;
+            MatrixAnimationUsingPath maup = new MatrixAnimationUsingPath
+            {
+                PathGeometry = particlePath.Data.GetFlattenedPathGeometry(),
+                Duration = new Duration(TimeSpan.FromSeconds(pointTime)),
+                RepeatBehavior = RepeatBehavior.Forever,
+                AutoReverse = false,
+                IsOffsetCumulative = false,
+                DoesRotateWithTangent = true
+            };
             Storyboard.SetTarget(maup, runPoint);
             Storyboard.SetTargetProperty(maup, new PropertyPath("(Grid.RenderTransform).Children[0].(MatrixTransform.Matrix)"));
             sb.Children.Add(maup);
@@ -42,15 +43,13 @@ namespace LikeEcharts.View
 
             #region 达到城市的圆
             //轨迹到达圆时 圆呈现
-            DoubleAnimation ellda = new DoubleAnimation();
-            ellda.From = 0.2;//此处值设置0-1会有不同的呈现效果
-            ellda.To = 1;
-            ellda.Duration = new Duration(TimeSpan.FromSeconds(particleTime));
-            ellda.BeginTime = TimeSpan.FromSeconds(particleTime);//推迟动画开始时间 等轨迹连接到圆时 开始播放圆的呈现动画
-            ellda.FillBehavior = FillBehavior.HoldEnd;
+            var ellda = Animation1(particleTime);
             Storyboard.SetTarget(ellda, toEll);
             Storyboard.SetTargetProperty(ellda, new PropertyPath(Ellipse.OpacityProperty));
             sb.Children.Add(ellda);
+         
+            
+            
             //圆呈放射状
             RadialGradientBrush rgBrush = new RadialGradientBrush();
             GradientStop gStop0 = new GradientStop(Color.FromArgb(255, 0, 0, 0), 0);
@@ -61,67 +60,81 @@ namespace LikeEcharts.View
             rgBrush.GradientStops.Add(gStopT);
             rgBrush.GradientStops.Add(gStop1);
             toEll.OpacityMask = rgBrush;
+
+
             //跑动的点达到城市的圆时 控制点由不透明变为透明 color的a值设为0 动画时间为0
-            ColorAnimation ca = new ColorAnimation();
-            ca.To = Color.FromArgb(0, 0, 0, 0);
-            ca.Duration = new Duration(TimeSpan.FromSeconds(0));
-            ca.BeginTime = TimeSpan.FromSeconds(pointTime);
-            ca.FillBehavior = FillBehavior.HoldEnd;
+            var ca = ColorAnimation(pointTime);
             Storyboard.SetTarget(ca, toEll);
             Storyboard.SetTargetProperty(ca, new PropertyPath("(Ellipse.OpacityMask).(GradientBrush.GradientStops)[1].(GradientStop.Color)"));
             sb.Children.Add(ca);
-            //点达到城市的圆时 呈现放射状动画 控制点的off值走0-1 透明部分向外放射
-            DoubleAnimation eda = new DoubleAnimation();
-            eda.To = 1;
-            eda.Duration = new Duration(TimeSpan.FromSeconds(2));
-            eda.RepeatBehavior = RepeatBehavior.Forever;
-            eda.BeginTime = TimeSpan.FromSeconds(particleTime);
+
+
+            var eda = Animation2(particleTime);
             Storyboard.SetTarget(eda, toEll);
             Storyboard.SetTargetProperty(eda, new PropertyPath("(Ellipse.OpacityMask).(GradientBrush.GradientStops)[1].(GradientStop.Offset)"));
             sb.Children.Add(eda);
             #endregion
 
-            #region 运动轨迹
-            //找到渐变的起点和终点
-            //Point startPoint = GetProvincialCapitalPoint(from);
-            //Point endPoint = GetProvincialCapitalPoint(toItem.To);
-            Point start = new Point(0, 0);
-            Point end = new Point(1, 1);
-            if (startPoint.X > endPoint.X)
-            {
-                start.X = 1;
-                end.X = 0;
-            }
-            if (startPoint.Y > endPoint.Y)
-            {
-                start.Y = 1;
-                end.Y = 0;
-            }
-            LinearGradientBrush lgBrush = new LinearGradientBrush();
-            lgBrush.StartPoint = start;
-            lgBrush.EndPoint = end;
-            GradientStop lgStop0 = new GradientStop(Color.FromArgb(255, 0, 0, 0), 0);
-            GradientStop lgStop1 = new GradientStop(Color.FromArgb(0, 0, 0, 0), 0);
-            lgBrush.GradientStops.Add(lgStop0);
-            lgBrush.GradientStops.Add(lgStop1);
-            particlePath.OpacityMask = lgBrush;
-            //运动轨迹呈现
-            DoubleAnimation pda0 = new DoubleAnimation();
-            pda0.To = 1;
-            pda0.Duration = new Duration(TimeSpan.FromSeconds(particleTime));
-            pda0.FillBehavior = FillBehavior.HoldEnd;
+            DoubleAnimation pda0 = Animation3(particleTime);
+            GetPath1(ref particlePath, startPoint, endPoint);
             Storyboard.SetTarget(pda0, particlePath);
             Storyboard.SetTargetProperty(pda0, new PropertyPath("(Path.OpacityMask).(GradientBrush.GradientStops)[0].(GradientStop.Offset)"));
             sb.Children.Add(pda0);
-            DoubleAnimation pda1 = new DoubleAnimation();
-            //pda1.From = 0.5; //此处解开注释 值设为0-1 会有不同的轨迹呈现效果
-            pda1.To = 1;
-            pda1.Duration = new Duration(TimeSpan.FromSeconds(particleTime));
-            pda1.FillBehavior = FillBehavior.HoldEnd;
+
+
+            var pda1 = Animation3(particleTime);
             Storyboard.SetTarget(pda1, particlePath);
             Storyboard.SetTargetProperty(pda1, new PropertyPath("(Path.OpacityMask).(GradientBrush.GradientStops)[1].(GradientStop.Offset)"));
             sb.Children.Add(pda1);
-            #endregion
+
         }
+
+        public static void GetPath1(ref Path path, Point startPoint, Point endPoint)
+        {
+
+            path.OpacityMask =
+             new LinearGradientBrush
+             {
+                 StartPoint = new Point(startPoint.X > endPoint.X ? 1 : 0, startPoint.Y > endPoint.Y ? 1 : 0),
+                 EndPoint = new Point(startPoint.X > endPoint.X ? 0 : 1, startPoint.Y > endPoint.Y ? 0 : 1),
+                 GradientStops = new GradientStopCollection(new[]
+                 {
+                             new GradientStop(Color.FromArgb(255, 0, 0, 0), 0),
+                             new GradientStop(Color.FromArgb(0, 0, 0, 0), 0),
+                 })
+             };
+        }
+        private static ColorAnimation ColorAnimation(double pointTime) => new ColorAnimation
+        {
+            To = Color.FromArgb(0, 0, 0, 0),
+            Duration = new Duration(TimeSpan.FromSeconds(0)),
+            BeginTime = TimeSpan.FromSeconds(pointTime),
+            FillBehavior = FillBehavior.HoldEnd
+        };
+
+        private static DoubleAnimation Animation1(double particleTime) => new DoubleAnimation
+        {
+            From = 0.2,//此处值设置0-1会有不同的呈现效果
+            To = 1,
+            Duration = new Duration(TimeSpan.FromSeconds(particleTime)),
+            BeginTime = TimeSpan.FromSeconds(particleTime),//推迟动画开始时间 等轨迹连接到圆时 开始播放圆的呈现动画
+            FillBehavior = FillBehavior.HoldEnd
+        };
+
+        private static DoubleAnimation Animation2(double particleTime) => new DoubleAnimation
+        {
+            To = 1,
+            Duration = new Duration(TimeSpan.FromSeconds(2)),
+            RepeatBehavior = RepeatBehavior.Forever,
+            BeginTime = TimeSpan.FromSeconds(particleTime)
+        };
+
+        private static DoubleAnimation Animation3(double particleTime) => new DoubleAnimation
+        {
+            //pda1.From = 0.5; //此处解开注释 值设为0-1 会有不同的轨迹呈现效果
+            To = 1,
+            Duration = new Duration(TimeSpan.FromSeconds(particleTime)),
+            FillBehavior = FillBehavior.HoldEnd
+        };
     }
 }

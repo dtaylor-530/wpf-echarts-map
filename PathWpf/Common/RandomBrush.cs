@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace LikeEcharts.View
+namespace PathWpf
 {
 
     public static class RandomBrush

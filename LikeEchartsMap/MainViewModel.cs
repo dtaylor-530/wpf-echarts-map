@@ -42,7 +42,7 @@ namespace LikeEchartsMap
                              .Where(_ => _.isselected)
                              .Subscribe(_ =>
                              {
-                                 foreach (var x in Class1.AddAnimation(mapItem.Model, _.angle, _storyboard, _.speed, m_PointData))
+                                 foreach (var x in Animator.GetAnimations(mapItem.Model, _.angle, _storyboard, _.speed, m_PointData))
                                      observer.OnNext(x);
                              }));
                     return disposables.AsLazyComposite();
