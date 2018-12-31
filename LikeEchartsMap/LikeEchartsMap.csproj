@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.12.1.0\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="INotifyPropertyChangedExtensions, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\INotifyPropertyChangedExtensions.1.0.1\lib\portable45-net45+win8+wp8+wpa81\INotifyPropertyChangedExtensions.dll</HintPath>
     </Reference>
@@ -104,10 +107,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converter.cs" />
-    <Compile Include="Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Converter\Converter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -121,10 +121,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Window1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -159,13 +155,9 @@
       <Project>{6338E59E-CFD5-4DEF-BEB3-1783FFFB6BA1}</Project>
       <Name>LikeEcharts.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LikeEcharts.ViewModel\LikeEcharts.ViewModel.csproj">
-      <Project>{c6e2d29c-af3b-4c5b-bf0f-30ddf53a95ab}</Project>
-      <Name>LikeEcharts.ViewModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LikeEcharts.View\LikeEcharts.View.csproj">
+    <ProjectReference Include="..\LikeEcharts.View\LikeEcharts.csproj">
       <Project>{7605ed7a-056c-4f7c-a608-153d7bc2c060}</Project>
-      <Name>LikeEcharts.View</Name>
+      <Name>LikeEcharts</Name>
     </ProjectReference>
     <ProjectReference Include="..\LikeEcharts.DAL\LikeEcharts.DAL.csproj">
       <Project>{b0ab06d1-cf34-4282-8855-2a7115f75c83}</Project>

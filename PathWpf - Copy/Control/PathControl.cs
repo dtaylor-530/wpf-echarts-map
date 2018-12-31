@@ -94,32 +94,31 @@ namespace PathWpf
 
             Random rd = new Random();
 
-            //PointChanges
-            //    .CombineLatest(DiameterChanges, SpeedChanges, (a, c, d) =>
-            //    {
+            PointChanges
+                .CombineLatest(DiameterChanges, SpeedChanges, (a, c, d) =>
+                {
 
-            //        var startPoint = (a as PathGeometry).Figures.First().StartPoint;
-            //        var endPoint = (a as PathGeometry).Figures.Last().StartPoint;
+                    var startPoint = (a as PathGeometry).Figures.First().StartPoint;
+                    var endPoint = (a as PathGeometry).Figures.Last().StartPoint;
 
-            //        byte[] rgb = new byte[] { (byte)rd.Next(0, 255), (byte)rd.Next(0, 255), (byte)rd.Next(0, 255) };
+                    byte[] rgb = new byte[] { (byte)rd.Next(0, 255), (byte)rd.Next(0, 255), (byte)rd.Next(0, 255) };
 
-            //        //Path particlePath = PathEllipse.GetPath(startPoint, endPoint, _storyboard, rgb, (a as PathGeometry), 2);
+                    Path particlePath = PathEllipse.GetPath(startPoint, endPoint, _storyboard, rgb, (a as PathGeometry), 2);
 
-            //        //return PathEllipse.GetAnimation(startPoint, endPoint, c, a, rgb, _storyboard, 2, m_PointData);
-            //        return null;
-            //    })
-            //    .Subscribe(_ =>
-            //    {
-            //        foreach (var x in _)
-            //            try
-            //            {
-            //                contentGrid.Children.Add((UIElement)x);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //            }
-            //        _storyboard.Begin(this);
-            //    });
+                    return PathEllipse.GetAnimation(startPoint, endPoint, c, a, rgb, _storyboard, 2, m_PointData);
+                })
+                .Subscribe(_ =>
+                {
+                    foreach (var x in _)
+                        try
+                        {
+                            contentGrid.Children.Add((UIElement)x);
+                        }
+                        catch (Exception e)
+                        {
+                        }
+                    _storyboard.Begin(this);
+                });
         }
 
 

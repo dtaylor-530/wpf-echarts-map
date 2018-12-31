@@ -4,9 +4,7 @@
       
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="仿百度Echart人口迁移图" Width="640" Height="480" >
-    <Window.Resources>
-        <view:FirstItemConverter x:Key="FirstItemConverter"></view:FirstItemConverter>
-    </Window.Resources>
+
     <Viewbox>
         <Viewbox.Resources>
             <ResourceDictionary>
@@ -44,7 +42,7 @@
             <ContentControl Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Content="{StaticResource China }"/>
 
             <Grid Grid.Column="1" Name="grid_Animation">
-                <Path Stroke="Red">
+                <!--<Path Stroke="Red">
                     <Path.Data>
                         <PathGeometry>
                             <PathFigure StartPoint="500,100">
@@ -59,7 +57,7 @@
                             <GradientStop Offset="1" Color="#FF000000"></GradientStop>
                         </LinearGradientBrush>
                     </Path.OpacityMask>
-                </Path>
+                </Path>-->
             </Grid>
         </Grid>
     </Viewbox>

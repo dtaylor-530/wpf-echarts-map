@@ -79,7 +79,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\GeometryHelper.cs" />
     <Compile Include="Common\RandomBrush.cs" />
     <Compile Include="Common\StoryBoard.cs" />
     <Page Include="Themes\PathControl.xaml">
@@ -90,6 +89,7 @@
   <ItemGroup>
     <Compile Include="Control\PathControl.cs" />
     <Compile Include="Common\PathEllipse.cs" />
+    <Compile Include="Control\PathGeometryControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

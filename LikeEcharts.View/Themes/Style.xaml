@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:LikeEcharts.View"
-                       xmlns:sns="clr-namespace:SomeNameSpace;assembly=SomeAssembly">
+                     >
 
     <!--地图-->
     <Style TargetType="{x:Type Polygon}">
@@ -28,9 +28,7 @@
         </Style.Triggers>
     </Style>
 
-    <!--<Path x:Key="ParticlePath"  Style="{StaticResource ParticlePathStyle}">
-        
-    </Path>-->
+
     <!--提示-->
     <Style TargetType="{x:Type ToolTip}">
         <Setter Property="BorderBrush" Value="#FF000000"/>

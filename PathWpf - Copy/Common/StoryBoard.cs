@@ -13,8 +13,20 @@ namespace PathWpf
 {
     public static class StoryBoard
     {
-        public static void AddPointToStoryboard(Grid runPoint, Ellipse toEll, Storyboard sb, PathGeometry particle,
-            double l, Point startPoint, Point endPoint,double pointTime)
+
+
+        private static DoubleAnimation Animation1(double particleTime) => new DoubleAnimation
+        {
+            From = 0.2,//此处值设置0-1会有不同的呈现效果
+            To = 1,
+            Duration = new Duration(TimeSpan.FromSeconds(particleTime)),
+            BeginTime = TimeSpan.FromSeconds(particleTime),//推迟动画开始时间 等轨迹连接到圆时 开始播放圆的呈现动画
+            FillBehavior = FillBehavior.HoldEnd
+        };
+
+
+
+        public static void AddPointToStoryboard(Grid runPoint, Ellipse toEll, Storyboard sb, PathGeometry pathGeometry,           double pointTime)
         {
             //double pointTime = l / m_Speed;//点运动所需的时间
             double particleTime = pointTime / 2;//轨迹呈现所需时间(跑的比点快两倍)
@@ -29,7 +41,7 @@ namespace PathWpf
 
             MatrixAnimationUsingPath maup = new MatrixAnimationUsingPath
             {
-                PathGeometry = particle.GetFlattenedPathGeometry(),
+                PathGeometry = pathGeometry,
                 Duration = new Duration(TimeSpan.FromSeconds(pointTime)),
                 RepeatBehavior = RepeatBehavior.Forever,
                 AutoReverse = false,
@@ -42,18 +54,16 @@ namespace PathWpf
             #endregion
 
             #region 达到城市的圆
-            //轨迹到达圆时 圆呈现
+
             var ellda = Animation1(particleTime);
             Storyboard.SetTarget(ellda, toEll);
             Storyboard.SetTargetProperty(ellda, new PropertyPath(Ellipse.OpacityProperty));
             sb.Children.Add(ellda);
-         
-            
-            
-            //圆呈放射状
+
+
             RadialGradientBrush rgBrush = new RadialGradientBrush();
             GradientStop gStop0 = new GradientStop(Color.FromArgb(255, 0, 0, 0), 0);
-            //此为控制点 color的a值设为0 off值走0-1 透明部分向外放射 初始设为255是为了初始化效果 开始不呈放射状 等跑动的点运动到城市的圆后 color的a值才设为0开始呈现放射动画
+         
             GradientStop gStopT = new GradientStop(Color.FromArgb(255, 0, 0, 0), 0);
             GradientStop gStop1 = new GradientStop(Color.FromArgb(255, 0, 0, 0), 1);
             rgBrush.GradientStops.Add(gStop0);
@@ -62,7 +72,6 @@ namespace PathWpf
             toEll.OpacityMask = rgBrush;
 
 
-            //跑动的点达到城市的圆时 控制点由不透明变为透明 color的a值设为0 动画时间为0
             var ca = ColorAnimation(pointTime);
             Storyboard.SetTarget(ca, toEll);
             Storyboard.SetTargetProperty(ca, new PropertyPath("(Ellipse.OpacityMask).(GradientBrush.GradientStops)[1].(GradientStop.Color)"));
@@ -75,26 +84,12 @@ namespace PathWpf
             sb.Children.Add(eda);
             #endregion
 
-
-
         }
 
-        public static LinearGradientBrush GetGradientBrush(Point startPoint, Point endPoint)
-        {
 
-          return
-             new LinearGradientBrush
-             {
-                 StartPoint = new Point(startPoint.X > endPoint.X ? 1 : 0, startPoint.Y > endPoint.Y ? 1 : 0),
-                 EndPoint = new Point(startPoint.X > endPoint.X ? 0 : 1, startPoint.Y > endPoint.Y ? 0 : 1),
-                 GradientStops = new GradientStopCollection(new[]
-                 {
-                             new GradientStop(Color.FromArgb(255, 0, 0, 0), 0),
-                             new GradientStop(Color.FromArgb(0, 0, 0, 0), 0),
-                 })
-             };
-        }
-        public static ColorAnimation ColorAnimation(double pointTime) => new ColorAnimation
+
+
+        private static ColorAnimation ColorAnimation(double pointTime) => new ColorAnimation
         {
             To = Color.FromArgb(0, 0, 0, 0),
             Duration = new Duration(TimeSpan.FromSeconds(0)),
@@ -102,16 +97,9 @@ namespace PathWpf
             FillBehavior = FillBehavior.HoldEnd
         };
 
-        public static DoubleAnimation Animation1(double particleTime) => new DoubleAnimation
-        {
-            From = 0.2,//此处值设置0-1会有不同的呈现效果
-            To = 1,
-            Duration = new Duration(TimeSpan.FromSeconds(particleTime)),
-            BeginTime = TimeSpan.FromSeconds(particleTime),//推迟动画开始时间 等轨迹连接到圆时 开始播放圆的呈现动画
-            FillBehavior = FillBehavior.HoldEnd
-        };
 
-        public static DoubleAnimation Animation2(double particleTime) => new DoubleAnimation
+
+        private static DoubleAnimation Animation2(double particleTime) => new DoubleAnimation
         {
             To = 1,
             Duration = new Duration(TimeSpan.FromSeconds(2)),
@@ -119,12 +107,5 @@ namespace PathWpf
             BeginTime = TimeSpan.FromSeconds(particleTime)
         };
 
-        public static DoubleAnimation Animation3(double particleTime) => new DoubleAnimation
-        {
-            //pda1.From = 0.5; //此处解开注释 值设为0-1 会有不同的轨迹呈现效果
-            To = 1,
-            Duration = new Duration(TimeSpan.FromSeconds(particleTime)),
-            FillBehavior = FillBehavior.HoldEnd
-        };
     }
 }
